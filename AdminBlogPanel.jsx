@@ -83,21 +83,18 @@ var AdminBlogPanel = React.createClass({
 			</div>
 		);
 	},
-
 	render: function() {
-		var columns = ['ID', 'Share Image', 'Title', 'Short Description', 'Content', 'Title Image Path', 'Category Id', 'App Id', 'URL', 'Meta Description', 'Edit'];
+		var columns = ['ID', 'Image', 'Title', 'Short Description', 'Content', 'Category', 'App Name', 'URL', 'Edit'];
 		var posts = this.state.posts.map(function(post,index) {
 			return (
 				<Tr key={index}>
 					<Td column="ID" value={index} >{post.id}</Td>
-					<Td column="Share Image" value={post.share_img} >{post.share_img}</Td>
+					<Td column="Image" value={post.share_img} >{post.share_img}</Td>
 					<Td column="Title" value={post.title} >{post.title}</Td>
 					<Td column="Short Description" value={post.short_description} >{post.short_description}</Td>
-					<Td column="Content" value={post.content} >{post.content}</Td>
-					<Td column="Title Image Path" value={post.title_img_path} >{post.title_img_path}</Td>
-					<Td column="Category Id" value={post.category.name}>{post.category.name}</Td>
-					<Td column="App Id" value={post.app.name} >{post.app.name}</Td>
-					<Td column="Meta Description" value={post.meta_description} >{post.meta_description}</Td>
+					<Td column="Content" value={post.content} ><div dangerouslySetInnerHTML={{__html: post.content}} /></Td>
+					<Td column="Category" value={post.category.name}>{post.category.name}</Td>
+					<Td column="App Name" value={post.app.name} >{post.app.name}</Td>
 					<Td column="URL" value={post.url} >{post.url}</Td>
 					<Td column="Edit">
 						<ButtonToolbar>

@@ -9,6 +9,7 @@ var FormControl = require('react-bootstrap/lib/FormControl');
 var SpeedyPaperActions = require('../../actions/SpeedyPaperActions');
 var BlogStore = require('../../stores/BlogStore');
 var BlogListStore = require('../../stores/BlogListStore');
+var Quill = require('react-quill');
 
 function getState() {
     return {
@@ -18,6 +19,7 @@ function getState() {
         is_loaded: BlogStore.getIsLoadedInfo(),
         renderedFields: 0,
         typed: {},// simple fields
+        content: '',
     };
 }
 
@@ -25,6 +27,9 @@ var AdminEditPost = React.createClass({
 
     _submitForm: function(e) {
         e.preventDefault();
+        const typed = this.state.typed;
+        typed["content"] = this.state.content;
+        this.setState({typed: typed});
         SpeedyPaperActions.a('UPDATE_POST_ATTEMPT',this.state);
     },
 
@@ -33,6 +38,12 @@ var AdminEditPost = React.createClass({
         typed[e.target.name] = e.target.value;
         this.setState({typed: typed});
     },
+
+    _handleFroalaChange: function(value) {
+        this.setState({content: value});
+    },
+
+
     getInitialState() {
         return getState();
     },
@@ -53,7 +64,6 @@ var AdminEditPost = React.createClass({
     renderedFields: 0,
 
     render: function() {
-
         if (this.state.is_loaded) {
             return <div style={{margin:10}}><i className="fa fa-circle-o-notch fa-spin"></i> Loading...</div>
         }
@@ -94,30 +104,13 @@ var AdminEditPost = React.createClass({
                                         defaultValue={this.state.post_info.short_description}
                                         placeholder="Short Description"
                                         onChange={(event) => this._handleChanges(event)}
-                                        style={{ height: 200, resize:"vertical" }}
                                         />
                                 </div>
                             </div>
 
                             <div className="form-group">
                                 <ControlLabel className="col-xs-12 col-sm-3">
-                                    Content
-                                </ControlLabel>
-                                <div className="col-xs-12 col-sm-9">
-                                    <FormControl
-                                        componentClass="textarea"
-                                        name="content"
-                                        defaultValue={this.state.post_info.content}
-                                        placeholder="Content"
-                                        onChange={(event) => this._handleChanges(event)}
-                                        style={{ height: 200, resize:"vertical" }}
-                                        />
-                                </div>
-                            </div>
-
-                            <div className="form-group">
-                                <ControlLabel className="col-xs-12 col-sm-3">
-                                    App id
+                                    App Name
                                 </ControlLabel>
                                 <div className="col-xs-12 col-sm-9">
                                     <FormControl
@@ -142,7 +135,7 @@ var AdminEditPost = React.createClass({
 
                             <div className="form-group">
                                 <ControlLabel className="col-xs-12 col-sm-3">
-                                    Category Id
+                                    Category
                                 </ControlLabel>
                                 <div className="col-xs-12 col-sm-9">
                                     <FormControl
@@ -183,7 +176,7 @@ var AdminEditPost = React.createClass({
 
                             <div className="form-group">
                                 <ControlLabel className="col-xs-12 col-sm-3">
-                                    Share Img
+                                    Image
                                 </ControlLabel>
                                 <div className="col-xs-12 col-sm-9">
                                     <FormControl
@@ -197,10 +190,24 @@ var AdminEditPost = React.createClass({
                                 </div>
                             </div>
 
-                            <ButtonToolbar style={{marginBottom:5, marginRight:5}}>
+                            <div className="form-group">
+                                <ControlLabel className="col-xs-12 col-sm-3">
+                                    Content
+                                </ControlLabel>
+                                <div className="col-xs-12 col-sm-9">
+                                    <Quill
+                                        defaultValue={this.state.post_info.content}
+                                        onChange={this._handleFroalaChange}
+                                        style={{ height: 200, resize:"vertical" }}
+                                        />
+
+                                </div>
+                            </div>
+
+                            <ButtonToolbar style={{marginTop:50, marginRight:5}}>
                                 <div className="pull-right">
                                     <Button onClick={this._submitForm} type="submit" bsStyle="success" style={{marginLeft:5}}>Save</Button>
-                                    <Link className="btn btn-primary" style={{color: '#ffffff', marginLeft:5}} to={{ name:"get-post"}} >
+                                    <Link className="btn btn-primary" style={{color: '#ffffff', marginLeft:5}} to={{ name:"blog"}} >
                                         Back
                                     </Link>
                                 </div>
