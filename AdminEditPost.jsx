@@ -28,7 +28,9 @@ var AdminEditPost = React.createClass({
     _submitForm: function(e) {
         e.preventDefault();
         const typed = this.state.typed;
-        typed["content"] = this.state.content;
+        if (this.state.content) {
+            typed["content"] = this.state.content;
+        }
         this.setState({typed: typed});
         SpeedyPaperActions.a('UPDATE_POST_ATTEMPT',this.state);
     },
@@ -197,6 +199,11 @@ var AdminEditPost = React.createClass({
                                 <div className="col-xs-12 col-sm-9">
                                     <Quill
                                         defaultValue={this.state.post_info.content}
+                                        modules={{
+                                            clipboard: {
+                                                matchVisual: false,
+                                            }
+                                        }}
                                         onChange={this._handleFroalaChange}
                                         style={{ height: 200, resize:"vertical" }}
                                         />
